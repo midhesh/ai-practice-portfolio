@@ -4,6 +4,8 @@
 
 MIT's 2025 "State of AI in Business" study (widely reported, e.g. [Forbes](https://www.forbes.com/sites/andreahill/2025/08/21/why-95-of-ai-pilots-fail-and-what-business-leaders-should-do-instead/)) found that roughly 95% of generative AI pilots fail to reach production or deliver measurable ROI. The report's own conclusion isn't "the technology doesn't work", it's that most pilots never had a defined bar for success in the first place, so results get judged by feeling after the fact. A mediocre result gets rationalized as fine; a genuinely good one gets dismissed because nobody agreed in advance what "good" meant.
 
+![AI Pilot Scorecard workflow](../diagrams/workflow_pilot_scorecard.png)
+
 ## What it does
 
 A single self-contained interactive page (`index.html`, no dependencies, works offline) that forces the definition-before-execution discipline, in four steps:

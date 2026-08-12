@@ -4,6 +4,8 @@
 
 The Decision Log tool in this portfolio only helps if decisions actually get logged into it, and nobody reliably stops mid-meeting to fill out a form. Most real decisions get made inside ordinary meeting notes, sitting next to reminders, small talk, and unrelated updates, and never make it into anything searchable.
 
+![Meeting Bridge workflow](../diagrams/workflow_meeting_bridge.png)
+
 ## What it does
 
 1. **Cheap filter:** splits raw meeting notes into paragraphs and heuristically flags ones that sound like they contain a decision (regex over phrases like "we decided," "agreed to," "going with"). Fast, free, and deliberately not trusted alone.

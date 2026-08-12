@@ -10,7 +10,7 @@ This has gotten worse since AI chat tools became part of daily work. A lot of re
 
 This is an MCP (Model Context Protocol) server, the current open standard for connecting an AI assistant to tools and data, exposing `log_decision` and `query_decisions` to any MCP-compatible client like Claude Desktop. The main thing worth noticing is that it checks itself. Every time someone logs a new decision, it's automatically compared against everything already on record before it gets saved, not just whenever someone remembers to go searching.
 
-![The two-pass pattern](../diagrams/two_pass_architecture.png)
+![Decision Log workflow](../diagrams/workflow_decision_log.png)
 
 ## Two passes, not one
 
