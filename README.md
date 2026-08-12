@@ -1,6 +1,6 @@
 # AI Decision / Prompt / Pilot Toolkit
 
-Four small, working tools built around one idea: **a fast, cheap, deterministic check can propose or flag, it can't judge.** Telling a real match from a coincidental one, or a correct answer from a differently-worded one, takes actual reasoning. Each tool pairs a cheap first-pass filter with a genuine reasoning layer on top, and each one is proven live in its own README with a real example of where the cheap layer alone gets it wrong.
+Four small, working tools built around one idea: **a fast, cheap, deterministic check can propose or flag, it can't judge.** Telling a real match from a coincidental one, or a correct answer from a differently-worded one, takes actual reasoning. Each tool pairs a cheap first filter with a genuine reasoning layer on top, and each one is proven live in its own README with a real example of where the cheap layer alone gets it wrong.
 
 Full narrative writeup: [PORTFOLIO.md](./PORTFOLIO.md)
 
