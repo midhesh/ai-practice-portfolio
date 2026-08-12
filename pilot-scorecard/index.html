@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Pilot Scorecard</title>
+<style>
+  :root {
+    --bg: #0b0c10; --panel: #131519; --panel2: #191c22; --border: #262a33;
+    --text: #eef0f3; --muted: #8b93a3; --accent: #ffb454; --accent2: #5fd4c4;
+    --good: #3ddc97; --warn: #ffb454; --bad: #ff6b6b;
+    --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f5f4f1; --panel: #ffffff; --panel2: #fbfaf7; --border: #e2e0da;
+      --text: #16181d; --muted: #6b7280; --accent: #b5650b; --accent2: #0f8f7e;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    padding: 40px 18px 80px;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+
+  .kicker {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+  }
+  h1 { font-size: 1.7rem; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .sub {
+    color: var(--muted); font-size: 0.93rem; line-height: 1.65; margin-bottom: 8px;
+    border-left: 2px solid var(--border); padding-left: 14px;
+  }
+  .sub a { color: var(--accent2); text-decoration: none; border-bottom: 1px dotted var(--accent2); }
+  .stepper {
+    display: flex; gap: 6px; margin: 28px 0 22px; font-family: var(--mono); font-size: 0.72rem;
+  }
+  .step-chip {
+    flex: 1; text-align: center; padding: 7px 4px; border-radius: 6px; border: 1px solid var(--border);
+    color: var(--muted); background: var(--panel2);
+  }
+  .step-chip b { color: var(--text); display: block; font-family: -apple-system, sans-serif; font-size: 0.8rem; margin-bottom: 2px; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 24px; margin-bottom: 16px; position: relative;
+  }
+  .card .num {
+    position: absolute; top: 20px; right: 22px; font-family: var(--mono);
+    font-size: 0.7rem; color: var(--border); font-weight: 700;
+  }
+  .card h2 { font-size: 1rem; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  .card .hint { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; line-height: 1.55; }
+  label { display: block; font-size: 0.82rem; margin: 12px 0 6px; color: var(--muted); font-weight: 600; }
+  input[type=text], textarea, input[type=number], select {
+    width: 100%; background: var(--panel2); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); padding: 10px 12px; font-size: 0.92rem; font-family: inherit;
+  }
+  textarea { min-height: 52px; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row, .row3 { grid-template-columns: 1fr; } }
+
+  .risk-item {
+    display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px;
+  }
+  .risk-item input { margin-top: 3px; accent-color: var(--accent); }
+  .risk-item span { font-size: 0.85rem; line-height: 1.4; }
+
+  button {
+    background: var(--accent); color: #1a1000; border: none; border-radius: 8px;
+    padding: 12px 20px; font-size: 0.92rem; font-weight: 700; cursor: pointer; margin-top: 8px;
+    letter-spacing: 0.01em;
+  }
+  button:hover { filter: brightness(1.08); }
+
+  #result { display: none; }
+  .verdict-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+  }
+  .verdict-head { padding: 24px; text-align: center; border-bottom: 1px solid var(--border); }
+  .verdict-word {
+    font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px;
+  }
+  .verdict-word.scale { color: var(--good); }
+  .verdict-word.iterate { color: var(--warn); }
+  .verdict-word.kill { color: var(--bad); }
+  .verdict-sub { color: var(--muted); font-size: 0.88rem; }
+  .verdict-body { padding: 20px 24px; }
+  .metric-line {
+    display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.82rem;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .metric-line:last-child { border-bottom: none; }
+  .metric-line .k { color: var(--muted); }
+  .reasoning { font-size: 0.9rem; line-height: 1.65; margin: 16px 0; }
+  .next-step {
+    background: var(--panel2); border: 1px dashed var(--border); border-radius: 10px;
+    padding: 14px 16px; font-size: 0.87rem; line-height: 1.5; margin-top: 14px;
+  }
+  .next-step .label { font-family: var(--mono); font-size: 0.68rem; color: var(--accent2); letter-spacing: 0.08em; display: block; margin-bottom: 6px; }
+  .risk-flag { color: var(--bad); font-size: 0.85rem; margin-top: 10px; padding: 10px 12px; background: rgba(255,107,107,0.08); border: 1px solid var(--bad); border-radius: 8px; }
+
+  footer { text-align: center; color: var(--muted); font-size: 0.76rem; margin-top: 28px; font-family: var(--mono); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision support tool</div>
+  <h1>AI Pilot Scorecard</h1>
+  <p class="sub">
+    MIT's 2025 "State of AI in Business" study found roughly 95% of generative AI pilots fail to reach production or deliver measurable ROI — not because the technology fails, but because success criteria are rarely defined before the trial starts, so results get judged by feeling afterward.
+    (<a href="https://www.forbes.com/sites/andreahill/2025/08/21/why-95-of-ai-pilots-fail-and-what-business-leaders-should-do-instead/" target="_blank">source</a>)
+    This tool forces that definition upfront, adds a responsible-use check, then gives an evidence-based verdict instead of a vibe-based one.
+  </p>
+
+  <div class="stepper">
+    <div class="step-chip"><b>01</b>Scope</div>
+    <div class="step-chip"><b>02</b>Success bar</div>
+    <div class="step-chip"><b>03</b>Risk check</div>
+    <div class="step-chip"><b>04</b>Verdict</div>
+  </div>
+
+  <div class="card">
+    <span class="num">01</span>
+    <h2>Define the pilot</h2>
+    <div class="hint">What is the professional providing, what is the AI actually doing, and what does the human still decide? If you can't fill in all three separately, the pilot isn't scoped yet.</div>
+    <label>Professional provides (input)</label>
+    <textarea id="provides" placeholder="e.g. raw meeting notes, past 10 examples of the task done manually"></textarea>
+    <label>AI does</label>
+    <textarea id="aiDoes" placeholder="e.g. drafts a structured first pass"></textarea>
+    <label>Human still decides</label>
+    <textarea id="humanDecides" placeholder="e.g. final approval, anything client-facing, edge-case judgment calls"></textarea>
+  </div>
+
+  <div class="card">
+    <span class="num">02</span>
+    <h2>Success criteria — set before running the pilot</h2>
+    <div class="hint">A number and a threshold, not a feeling. If this can't be filled in before the pilot starts, that's the actual problem to fix first.</div>
+    <div class="row">
+      <div>
+        <label>Metric being measured</label>
+        <input type="text" id="metricName" placeholder="e.g. % of drafts usable with minor edits">
+      </div>
+      <div>
+        <label>Baseline (before AI)</label>
+        <input type="text" id="baseline" placeholder="e.g. 0% (didn't exist) or current manual time">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Target threshold (%) to call it a success</label>
+        <input type="text" id="target" placeholder="e.g. 70">
+      </div>
+      <div>
+        <label>Sample size over the trial</label>
+        <input type="number" id="sampleSize" placeholder="e.g. 10 real cases">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="num">03</span>
+    <h2>Responsible-use risk check</h2>
+    <div class="hint">Checked items don't block the pilot — they raise the bar for what counts as "ready to scale," regardless of how good the metric looks.</div>
+    <label class="risk-item"><input type="checkbox" id="riskClient"><span>Involves client-facing data, communications, or deliverables</span></label>
+    <label class="risk-item"><input type="checkbox" id="riskPII"><span>Touches personally identifiable or sensitive information</span></label>
+    <label class="risk-item"><input type="checkbox" id="riskIrreversible"><span>Action is hard to reverse once taken (sent, deleted, submitted, scheduled)</span></label>
+    <label class="risk-item"><input type="checkbox" id="riskNoReview"><span>No human reviews the output before it takes effect</span></label>
+  </div>
+
+  <div class="card">
+    <span class="num">04</span>
+    <h2>After the trial — enter real results</h2>
+    <div class="row3">
+      <div>
+        <label>Actual result (%)</label>
+        <input type="number" id="actualPct" placeholder="e.g. 72" min="0" max="100">
+      </div>
+      <div>
+        <label>Would the human trust it unsupervised?</label>
+        <select id="trust">
+          <option value="3">Yes, on most cases</option>
+          <option value="2">On some, with spot-checks</option>
+          <option value="1">No, needs review every time</option>
+        </select>
+      </div>
+      <div>
+        <label>Did it save real time/effort?</label>
+        <select id="timeSaved">
+          <option value="3">Clearly yes</option>
+          <option value="2">Marginally</option>
+          <option value="1">No / added work</option>
+        </select>
+      </div>
+    </div>
+    <button onclick="evaluate()">Get verdict →</button>
+  </div>
+
+  <div id="result">
+    <div class="verdict-card">
+      <div class="verdict-head">
+        <div id="verdictWord" class="verdict-word"></div>
+        <div id="verdictSub" class="verdict-sub"></div>
+      </div>
+      <div class="verdict-body">
+        <div class="metric-line"><span class="k">Threshold check</span><span id="mThreshold"></span></div>
+        <div class="metric-line"><span class="k">Human trust score</span><span id="mTrust"></span></div>
+        <div class="metric-line"><span class="k">Time-saved score</span><span id="mTime"></span></div>
+        <div class="metric-line"><span class="k">Risk flags raised</span><span id="mRisk"></span></div>
+        <p class="reasoning" id="reasoning"></p>
+        <div id="riskFlagBox"></div>
+        <div class="next-step"><span class="label">Suggested next step</span><span id="nextStep"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>logic is fully client-side and inspectable — no black-box scoring</footer>
+</div>
+
+<script>
+function evaluate() {
+  const actual = parseFloat(document.getElementById('actualPct').value) || 0;
+  const target = parseFloat((document.getElementById('target').value.match(/\d+/) || [0])[0]);
+  const trust = parseInt(document.getElementById('trust').value);
+  const timeSaved = parseInt(document.getElementById('timeSaved').value);
+  const metricName = document.getElementById('metricName').value || 'the defined metric';
+
+  const risks = {
+    client: document.getElementById('riskClient').checked,
+    pii: document.getElementById('riskPII').checked,
+    irreversible: document.getElementById('riskIrreversible').checked,
+    noReview: document.getElementById('riskNoReview').checked,
+  };
+  const riskCount = Object.values(risks).filter(Boolean).length;
+  const highRiskGate = (risks.irreversible && risks.noReview) || riskCount >= 3;
+
+  const metThreshold = target > 0 ? actual >= target : null;
+  const humanFactor = trust + timeSaved; // 2 to 6
+
+  let verdictClass, verdictWord, verdictSub, reasoning, nextStep;
+
+  if (metThreshold === false) {
+    verdictClass = 'kill'; verdictWord = 'KILL';
+    verdictSub = 'Did not meet the pre-committed threshold';
+    reasoning = `Actual result (${actual}%) on ${metricName} fell short of the ${target}% target set before the trial. Per the pre-commitment made in step 2, this doesn't get graded on a curve after the fact.`;
+    nextStep = `Go back to step 1 — either the workflow needs a fundamentally different approach, or the target itself was unrealistic and should be re-set with fresh evidence before trying again.`;
+  } else if (highRiskGate) {
+    verdictClass = 'iterate'; verdictWord = 'ITERATE';
+    verdictSub = 'Metric passed, but risk profile caps the verdict';
+    reasoning = `The metric hit its target (${actual}% vs ${target}%), but this pilot touches ${riskCount} flagged risk area(s), including ${risks.irreversible && risks.noReview ? 'an irreversible action with no human review' : 'multiple sensitive factors'} — that combination is capped at Iterate regardless of metric performance until a human-review step is added.`;
+    nextStep = `Add an explicit human-approval step before the AI's output takes effect, then re-run the trial — the metric result should hold, this is purely about adding a safety gate, not fixing accuracy.`;
+  } else if (metThreshold === true && humanFactor >= 5) {
+    verdictClass = 'scale'; verdictWord = 'SCALE';
+    verdictSub = 'Bar met, human factor checks out, risk profile clean';
+    reasoning = `Hit the ${target}% threshold (actual: ${actual}%) on ${metricName}, the professional trusts it enough to reduce supervision, it's saving real time, and no high-risk combination was flagged. This is the actual signal a pilot is ready to expand beyond one person's desk.`;
+    nextStep = `Identify one adjacent team or use case with a similar workflow shape, and re-run this exact scorecard against their own numbers before assuming the result transfers.`;
+  } else if (metThreshold === true && humanFactor < 5) {
+    verdictClass = 'iterate'; verdictWord = 'ITERATE';
+    verdictSub = 'Hit the number, human factor is lagging';
+    reasoning = `The metric passed (${actual}% vs ${target}% target), but trust/time-saved signals are weak (${humanFactor}/6). A metric passing without the human actually trusting or benefiting from it usually means the metric was measuring the wrong thing, or the surrounding workflow needs work before this leaves the pilot stage.`;
+    nextStep = `Interview the pilot user specifically about the low-scoring factor (trust or time) — the fix is almost never "make the AI better," it's usually a workflow or interface friction point.`;
+  } else {
+    verdictClass = 'iterate'; verdictWord = 'INCONCLUSIVE';
+    verdictSub = "Success threshold wasn't defined precisely enough";
+    reasoning = `No clear numeric target was set in step 2, so there's nothing to measure the actual result against.`;
+    nextStep = `Re-run step 2 with a specific number before continuing — discovering the pilot started before it was scoped is itself a useful, if uncomfortable, finding.`;
+  }
+
+  document.getElementById('result').style.display = 'block';
+  const wordEl = document.getElementById('verdictWord');
+  wordEl.className = 'verdict-word ' + verdictClass;
+  wordEl.textContent = verdictWord;
+  document.getElementById('verdictSub').textContent = verdictSub;
+  document.getElementById('mThreshold').textContent = `${actual}% actual vs ${target || '—'}% target`;
+  document.getElementById('mTrust').textContent = `${trust}/3`;
+  document.getElementById('mTime').textContent = `${timeSaved}/3`;
+  document.getElementById('mRisk').textContent = `${riskCount}/4`;
+  document.getElementById('reasoning').textContent = reasoning;
+  document.getElementById('nextStep').textContent = nextStep;
+  document.getElementById('riskFlagBox').innerHTML = highRiskGate
+    ? `<div class="risk-flag">Risk gate active — see reasoning above. This overrides a metric-only pass.</div>` : '';
+
+  document.getElementById('result').scrollIntoView({behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "urgent-leak-report",
+    "input": "Subject: Water coming through ceiling near reception\n\nHi team, we noticed water dripping from a ceiling tile near the front reception desk this morning. It's not a lot yet but it's steadily dripping and there's a slight stain spreading. Building management hasn't been notified yet. Can someone advise?",
+    "must_include_any": ["urgent", "high priority", "immediate", "escalate", "today", "asap"],
+    "must_include_all": [],
+    "must_not_include": ["low priority", "no rush"],
+    "notes": "Active water intrusion near a shared space should always classify as urgent regardless of phrasing calmness."
+  },
+  {
+    "id": "routine-supply-request",
+    "input": "Subject: Running low on whiteboard markers\n\nJust a heads up, the marker box in the 3rd floor collab room is almost empty. Whenever it's convenient to restock, that'd be great. No rush at all.",
+    "must_include_any": ["low priority", "routine", "no rush", "when convenient"],
+    "must_include_all": [],
+    "must_not_include": ["urgent", "immediate", "escalate"],
+    "notes": "Explicit 'no rush' framing plus low-stakes subject should classify as low priority."
+  },
+  {
+    "id": "ambiguous-hvac-complaint",
+    "input": "Subject: Meeting room 4B is really warm again\n\nThis is the third time this month the AC in 4B hasn't been keeping up during afternoon meetings. People are uncomfortable but it's not dangerous or anything.",
+    "must_include_any": ["recurring", "follow up", "pattern", "repeated", "again this month"],
+    "must_include_all": [],
+    "must_not_include": [],
+    "notes": "This case specifically tests whether the model notices 'third time this month' as a recurring-issue signal, not just a one-off comfort complaint - a single-message classifier that only looks at severity, not history, will systematically miss this."
+  },
+  {
+    "id": "client-facing-deadline-risk",
+    "input": "Subject: Furniture delivery delayed for Thursday client walkthrough\n\nSupplier just told us the reception seating won't arrive until Friday. We have a client walkthrough scheduled Thursday afternoon and reception was supposed to be fully staged.",
+    "must_include_any": ["urgent", "high priority", "client", "escalate"],
+    "must_include_all": [],
+    "must_not_include": ["low priority"],
+    "notes": "Tests whether client-facing deadline risk is weighted correctly even though nothing is 'broken' - it's a scheduling/reputational risk, not a physical one."
+  },
+  {
+    "id": "internal-admin-question",
+    "input": "Subject: Where do I submit expense reports now?\n\nHeard the process changed. Can someone point me to the right form or portal?",
+    "must_include_any": ["low priority", "routine", "informational"],
+    "must_include_all": [],
+    "must_not_include": ["urgent", "escalate"],
+    "notes": "Basic administrative question, no operational risk - should be an easy low-priority classification."
+  },
+  {
+    "id": "false-urgency-signal",
+    "input": "Subject: URGENT!!! someone painted my reserved parking spot the wrong shade of blue again lol\n\nHaha whoever's been repainting spots for the survey, my spot's the wrong blue now. No big deal, just flagging for whenever, kind of funny honestly.",
+    "must_include_any": ["low priority", "not urgent", "no rush"],
+    "must_include_all": [],
+    "must_not_include": ["urgent priority", "high priority", "escalate"],
+    "notes": "Tests whether the classifier over-indexes on the literal word 'URGENT' and exclamation marks in the subject line rather than reading the actual content and tone - a classic keyword-triggered false positive. This case was added specifically because it was NOT in the original set - see auto_patch_demo.py for how the harness catches and fixes this live."
+  }
+]
