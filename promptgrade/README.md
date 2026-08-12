@@ -46,7 +46,7 @@ Score: 5/5 passed (100%)
 
 ## Why this matters more than the specific triage example
 
-The point isn't "AI can sort emails." It's that **a one-line prompt tweak, caught by a 5-case rubric, was the difference between a system that silently drops a real operational pattern and one that catches it.** A quick glance at a few outputs before rollout would have looked fine, v1 scores 4/5, and the one miss reads as a plausible, calm response. The gap only surfaces once the third HVAC ticket gets logged as three unrelated one-offs instead of one recurring problem. This is the exact judgment call this role requires: before recommending any AI-assisted workflow to a colleague, know how you'd actually verify it works, not just that it looks plausible on the cases you happened to try.
+The point isn't "AI can sort emails." It's that **a one-line prompt tweak, caught by a 5-case rubric, was the difference between a system that silently drops a real operational pattern and one that catches it.** A quick glance at a few outputs before rollout would have looked fine, v1 scores 4/5, and the one miss reads as a plausible, calm response. The gap only surfaces once the third HVAC ticket gets logged as three unrelated one-offs instead of one recurring problem. Before recommending any AI-assisted workflow to a colleague, it's worth knowing how you'd actually verify it works, not just that it looks plausible on the cases you happened to try.
 
 ## The agentic layer: auto-patching, not just grading
 

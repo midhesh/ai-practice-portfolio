@@ -23,7 +23,7 @@ Typing out a description and checking four boxes by hand is friction most people
 
 ## Why the verdict logic is deliberately simple and fully visible
 
-The scoring is a transparent, inspectable rule set (visible directly in the `<script>` block), not a model or a black box, because the entire point of this tool is to make a judgment call *legible and defensible*, which a hidden scoring algorithm would undermine. This mirrors the actual judgment this role requires: the value isn't in a clever algorithm, it's in forcing the right questions to be answered honestly, in the right order, including the responsible-use question most metric-only pilots skip entirely.
+The scoring is a transparent, inspectable rule set (visible directly in the `<script>` block), not a model or a black box, because the entire point of this tool is to make a judgment call *legible and defensible*, which a hidden scoring algorithm would undermine. The value isn't in a clever algorithm, it's in forcing the right questions to be answered honestly, in the right order, including the responsible-use question most metric-only pilots skip entirely.
 
 ## Run it
 
