@@ -1,7 +1,7 @@
 # AI Practice Portfolio
 ### Midhesh Mahadevan Shankar
 
-Most of the friction in adopting AI at work isn't really about the AI. It's about trust. People stop trusting a workflow the moment it quietly gets something wrong and nobody catches it, and once that trust is gone, the tool gets quietly abandoned even if it was mostly working. The four tools here each take on a small, specific version of that problem: information that gets lost between people, a process that looks reliable until it isn't, a trial that never gets judged against anything concrete, and a decision made in conversation that never makes it anywhere searchable. None of them are large systems. Each one is small enough to understand in a few minutes, and each one actually runs, with real results captured from real runs rather than described in the abstract.
+Most of the friction in adopting AI at work comes down to trust. People stop trusting a workflow the moment it quietly gets something wrong and nobody catches it, and once that trust is gone, the tool gets quietly abandoned even if it was mostly working. The four tools here each take on a small, specific version of that problem: information that gets lost between people, a process that looks reliable until it isn't, a trial that never gets judged against anything concrete, and a decision made in conversation that never makes it anywhere searchable. None of them are large systems. Each one is small enough to understand in a few minutes, and each one actually runs, with real results captured from real runs rather than described in the abstract.
 
 Full code: github.com/midhesh/ai-decision-prompt-pilot-toolkit
 
@@ -33,4 +33,4 @@ This tool reads through raw meeting notes, picks out the paragraphs that sound l
 
 ## Why build these four together
 
-Each one is really the same lesson from a different angle: a fast, cheap signal, whether that's overlapping words, a keyword match, or a number that hit its target, gets mistaken for an actual judgment. The fix is the same every time, two passes, not one. Let the fast check do what it's good at, which is speed and coverage, and put the real thinking in a slower pass where the decision actually gets made. That's less about making AI smarter and more about making the process around it something people can actually rely on.
+Each one is really the same lesson from a different angle: a fast, cheap signal, whether that's overlapping words, a keyword match, or a number that hit its target, gets mistaken for an actual judgment. The fix is the same every time, two passes, not one. Let the fast check do what it's good at, which is speed and coverage, and put the real thinking in a slower pass where the decision actually gets made. Getting that process right is what makes people actually rely on it.
