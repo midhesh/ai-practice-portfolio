@@ -1,39 +1,39 @@
 # AI Practice Portfolio — Midhesh Mahadevan Shankar
 
-Three working tools, each solving a specific, common problem that shows up whenever a team starts relying more on AI in day-to-day work. Full code and real results: **github.com/midhesh/ai-practice-portfolio**
+Three working tools, built around one idea: a fast, cheap, deterministic check can *propose* candidates or *flag* possibilities, but it can't *judge* — telling apart a real match from a coincidental one, or a correct answer from a differently-worded one, takes actual reasoning. Each tool pairs a cheap first-pass filter with a genuine reasoning layer on top, and each one proves live, with a real example, exactly where the cheap layer alone gets it wrong. Full code and real results: **github.com/midhesh/ai-decision-prompt-pilot-toolkit**
 
 ---
 
 ## 1. Decision Log
 
-**The problem:** teams lose track of *why* something was decided. The outcome sticks around; the reasoning behind it doesn't — especially now that a lot of that reasoning happens in quick AI chats that vanish once the conversation ends. Months later, the same question gets debated twice, or two people end up working from opposite assumptions without realizing it.
+**Right now:** someone decides something — in a meeting, a quick AI chat, a Slack thread — and it's never written down anywhere searchable. Months later, someone else makes the opposite call, with no way of knowing the first decision existed.
 
-**What it does:** a searchable record of decisions — not just what was decided, but why, and what was ruled out. The useful part: it checks itself. Every time a new decision is added, it automatically compares it against everything already on record and flags anything that looks like it overlaps or contradicts a past decision — before that conflict turns into wasted work. If a decision is later replaced, the old one stays on record but is clearly marked as outdated, so nobody acts on it by mistake.
+**What it does:** every decision is logged with its reasoning. The moment a new one is entered, a fast search proposes anything that looks related from everything already on record — then a reasoning layer actually judges the relationship: is this a real duplicate, a related-but-fine decision, or just a coincidence of wording? Only genuine conflicts get flagged; false alarms get cleared automatically, with the reasoning shown.
 
-**Proven in practice:** a duplicate decision made by someone unaware an earlier one existed was caught automatically. When an old decision was later replaced, anyone looking it up afterward was correctly pointed to the current answer instead of the outdated one.
+**Proven live:** two decisions about an "annual budget increase" — one for music club equipment, one for IEEE workshop speaker fees — share over half their vocabulary. The fast search flags them as related. The reasoning layer correctly clears it: unrelated initiatives, no real conflict. In the same test run, a genuine duplicate decision — phrased completely differently from the original — was correctly caught and explained in one sentence.
 
 ---
 
 ## 2. PromptGrade
 
-**The problem:** teams adopt an AI-assisted process because it looked fine the first few times they tried it, then find out much later — after it's already been relied on — that it fails in ways nobody caught. There's rarely a real check in place before something gets trusted.
+**Right now:** an AI-assisted process gets tried a few times, looks fine, and goes into regular use. The one input it consistently gets wrong doesn't surface until it's already been relied on in real work.
 
-**What it does:** tests an AI-assisted process against a set of realistic situations, including tricky edge cases, and gives a clear pass/fail readout instead of a gut feeling. When something fails, it doesn't just report the failure — it works out what's missing and proposes a specific fix, which can then be tested again immediately. It's a way of answering "is this actually reliable enough to trust" with evidence, and of closing the gap the moment a weakness is found rather than leaving it for someone to notice later.
+**What it does:** runs the process against realistic test situations and grades each response — first with a fast check, then with a reasoning layer that judges whether the response is actually *correct*, not just whether it used the expected words. When a failure is found, it doesn't stop at reporting it — it works out what's missing and generates a specific fix, which gets tested again immediately to confirm it actually worked.
 
-**Proven in practice:** an initial version handled 4 out of 5 realistic cases correctly, missing one where a small recurring issue was mistaken for a one-off. A targeted fix brought it to 5 out of 5. Tested again on a brand-new situation it had never seen — one designed to trip it up with misleading wording — it failed on the first attempt, and the automatically proposed fix corrected it on the very next try.
+**Proven live, twice over:** first, a version that looked solid (4 of 5 correct) was quietly missing a costly pattern — mistaking a recurring problem for a one-off, every time. The gap was diagnosed, a fix was generated automatically, and it was verified on a brand-new situation the system had never seen — which it got wrong initially and got right after the fix, proving the fix generalized. Second: a genuinely correct response was fast-checked as a *failure* simply because it avoided the expected phrasing — the reasoning layer caught that the fast check was wrong, not the response.
 
 ---
 
 ## 3. AI Pilot Scorecard
 
-**The problem:** most AI pilots inside companies don't clearly succeed or fail — they just quietly stall, because nobody agreed in advance what "success" would actually look like. A recent industry study found the large majority of AI pilots never reach real, ongoing use for exactly this reason.
+**Right now:** a team tries an AI-assisted approach for a few weeks. It kind of seems to help. Nobody agreed on a number for success beforehand, so months later nobody can say whether it actually worked. (A recent industry study found the large majority of AI pilots never reach real, ongoing use, for exactly this reason.)
 
-**What it does:** a simple tool that makes a team agree on what success means *before* a trial starts — a specific target, not a feeling — and then judges the real result against that target afterward. It goes a step further than a plain scorecard: even if the numbers look good, it won't recommend rolling something out further if it involves sensitive information, hard-to-reverse actions, or no human checking the output — those situations get flagged as needing more caution regardless of how good the metric looks, with a specific explanation of what to fix next.
+**What it does:** forces one specific number to count as success, written down before the trial starts — then checks the real result against it, not a feeling. A rough written description of the pilot gets scanned to flag likely risk areas automatically (client exposure, sensitive data, hard-to-undo actions, no human checking the output) for quick human review. Even a pilot that clearly beats its target doesn't get waved through if the risk profile says otherwise.
 
-**Proven in practice:** a pilot that comfortably beat its target number was still correctly held back from a "ready to scale" recommendation once it was flagged as touching an irreversible action with nobody reviewing the output — catching a case where a good number was hiding a real risk.
+**Proven live:** a one-line description — "AI drafts replies to client emails and sends them automatically without anyone reviewing first" — is correctly parsed into three separate risk flags in one pass. Separately, a pilot beating its target by 10 points was still correctly blocked from a "ready to scale" recommendation once flagged as touching an irreversible, unreviewed action — catching a good number hiding a real risk, which a plain metrics scorecard would have missed entirely.
 
 ---
 
 ## Why these three, together
 
-Each one addresses a different, common way AI adoption quietly goes wrong: **losing track of decisions and reasoning** (Decision Log), **trusting a process without ever really testing it** (PromptGrade), and **scaling something based on a good number while missing the risk underneath it** (Pilot Scorecard). None of this is about AI being more powerful — it's about using it more carefully, which is the actual work behind good AI adoption.
+Each targets the same underlying failure mode from a different angle: **trusting a fast signal as if it were a judgment** — treating word overlap as agreement, keyword matches as correctness, or a passing metric as safety. The fix, every time, is the same shape: keep the fast layer for what it's actually good at (speed, coverage), and put real reasoning where the decision actually happens. That's the discipline this role is describing — not making AI more powerful, making the process around it trustworthy enough to act on.

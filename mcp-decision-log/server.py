@@ -45,6 +45,7 @@ from collections import Counter
 from datetime import datetime, timezone
 
 from mcp.server.mcpserver import MCPServer
+from judge import judge_overlap
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "decisions.json")
 CONTRADICTION_THRESHOLD = 0.30  # cosine similarity above which a new decision
@@ -173,15 +174,37 @@ def log_decision(
     active = [d for d in decisions if d.get("status", "active") == "active"]
     overlap_warning = ""
     if active:
+        # Stage 1: cheap lexical prefilter (TF-IDF) - just proposes candidates worth a
+        # second look, out of what could be thousands of logged decisions. It is
+        # deliberately not trusted to make the actual call.
         ranked = _rank_by_similarity(candidate_text, active)
         best_entry, best_score = ranked[0]
         if best_score >= CONTRADICTION_THRESHOLD and best_entry["id"] != supersedes_id:
-            overlap_warning = (
-                f"\n\n[!] POSSIBLE OVERLAP DETECTED: this decision is {best_score:.0%} similar to "
-                f"active decision #{best_entry['id']} ('{best_entry['title']}'). If this changes "
-                f"that decision, re-log with supersedes_id={best_entry['id']}. If it's unrelated, "
-                f"no action needed - this is a proactive check, not a block."
+            # Stage 2: the real judgment - an LLM reasons about the actual relationship
+            # between the two decisions, not just their word overlap. Uses substantive
+            # content only (not auto-extracted tags, which are metadata, not reasoning).
+            best_entry_text = " ".join(
+                [best_entry["title"], best_entry["rationale"], best_entry.get("alternatives_rejected", "")]
             )
+            verdict = judge_overlap(candidate_text, best_entry_text)
+            if verdict["verdict"] == "FALSE_POSITIVE":
+                overlap_warning = (
+                    f"\n\n(Lexical prefilter found {best_score:.0%} word overlap with #{best_entry['id']}, "
+                    f"but the judgment layer cleared it: {verdict['reason']} No action needed.)"
+                )
+            elif verdict["verdict"] in ("CONTRADICTION", "RELATED_NOT_CONFLICTING"):
+                label = "LIKELY SUPERSEDES" if verdict["verdict"] == "CONTRADICTION" else "RELATED, NOT CONFLICTING"
+                overlap_warning = (
+                    f"\n\n[!] {label} — active decision #{best_entry['id']} ('{best_entry['title']}'). "
+                    f"{verdict['reason']} "
+                    + (f"Consider re-logging with supersedes_id={best_entry['id']}."
+                       if verdict["verdict"] == "CONTRADICTION" else "")
+                )
+            else:
+                overlap_warning = (
+                    f"\n\n[!] {best_score:.0%} lexical overlap with #{best_entry['id']} "
+                    f"('{best_entry['title']}') - no live judgment available in this offline demo, review manually."
+                )
 
     entry = {
         "id": len(decisions) + 1,

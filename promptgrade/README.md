@@ -71,12 +71,24 @@ Step 3 — grade again against the auto-patched prompt (v3):
   Result: PASS
 ```
 
+## The judgment layer: why keyword rubrics alone aren't the intelligence either
+
+The rubric grading above is a fast, cheap first pass — and, like any keyword check, it's fragile in a specific way: a response can be **correct in substance while using none of the expected words**, and the rubric alone will wrongly fail it. `judge_demo.py` proves this live: on the admin-question case, a response that's clearly correct ("this can wait, nothing operationally significant") but avoids the exact rubric words entirely gets:
+
+```
+Keyword-rubric grading:  FAIL (missing any of: low priority, routine, informational)
+LLM-judge grading:       PASS — correctly conveys low-stakes/non-urgent in different words
+```
+
+Same shape as the decision-log project in this portfolio: a cheap deterministic layer proposes or filters fast, but the actual judgment — does this response *mean* the right thing, not just contain the right words — needs real reasoning on top. Grading a workflow purely by keyword rubric would, over time, train whoever writes the prompts to chase specific phrasing instead of correctness.
+
 ## Run it yourself
 
 ```bash
 python harness.py v1
 python harness.py v2
 python auto_patch_demo.py
+python judge_demo.py
 ```
 
-No API key required — this repo ships two fixed, real response sets (`responses_v1.json`, `responses_v2.json`) so the eval is fully reproducible. To grade a live model instead of a recorded response set, swap `load_responses()` for a live API call — the grading logic is identical either way, because it doesn't care where the text came from.
+No API key required — this repo ships fixed, real response sets and real, live-generated judge verdicts for the exact cases demonstrated, so everything is fully reproducible. To grade a live model instead of a recorded response set, swap `load_responses()` / `call_llm_judge_live()` for a live API call — the logic is identical either way, because it doesn't care where the text came from.

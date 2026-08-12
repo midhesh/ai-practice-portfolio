@@ -17,6 +17,10 @@ A single self-contained interactive page (`index.html`, no dependencies, works o
 
 A pilot can hit its numeric target and still not be ready to scale. If a pilot **touches an irreversible action with no human review step** (or trips 3+ of the 4 risk flags), the verdict is capped at *Iterate* regardless of how good the metric looks — verified live: an 80%-actual-vs-70%-target pilot that would otherwise score *Scale* gets correctly capped to *Iterate* the moment "irreversible action" and "no human review" are both checked, with the reasoning stating exactly why and the specific fix needed (add a human-approval step) rather than a vague warning.
 
+## Faster to start: describe the pilot, get the risk checklist pre-filled
+
+Typing out a description and checking four boxes by hand is friction most people skip under deadline pressure — exactly when the risk check matters most. A rough free-text description gets scanned with transparent keyword patterns (not a model call — inspectable regex, shown to the user as exactly which phrase triggered which flag) to pre-fill the checklist, which is then reviewed and corrected by hand. Verified live: "AI drafts replies to client emails and sends them automatically without anyone reviewing first" correctly auto-checks client-facing exposure, irreversible action, and no-human-review — and correctly leaves PII unchecked, since nothing in the text implied it.
+
 ## Why the verdict logic is deliberately simple and fully visible
 
 The scoring is a transparent, inspectable rule set (visible directly in the `<script>` block), not a model or a black box — because the entire point of this tool is to make a judgment call *legible and defensible*, which a hidden scoring algorithm would undermine. This mirrors the actual judgment this role requires: the value isn't in a clever algorithm, it's in forcing the right questions to be answered honestly, in the right order, including the responsible-use question most metric-only pilots skip entirely.

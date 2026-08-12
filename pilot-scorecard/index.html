@@ -167,6 +167,10 @@
     <span class="num">03</span>
     <h2>Responsible-use risk check</h2>
     <div class="hint">Checked items don't block the pilot — they raise the bar for what counts as "ready to scale," regardless of how good the metric looks.</div>
+    <label>Optional: paste a rough pilot description to pre-fill the checklist below</label>
+    <textarea id="riskDesc" placeholder="e.g. AI drafts replies to client emails and sends them automatically without anyone reviewing first"></textarea>
+    <button type="button" style="margin-bottom:14px;" onclick="detectRisks()">Detect risks from description</button>
+    <div id="detectNote" class="hint" style="display:none; margin-top:-6px;"></div>
     <label class="risk-item"><input type="checkbox" id="riskClient"><span>Involves client-facing data, communications, or deliverables</span></label>
     <label class="risk-item"><input type="checkbox" id="riskPII"><span>Touches personally identifiable or sensitive information</span></label>
     <label class="risk-item"><input type="checkbox" id="riskIrreversible"><span>Action is hard to reverse once taken (sent, deleted, submitted, scheduled)</span></label>
@@ -223,6 +227,34 @@
 </div>
 
 <script>
+// Heuristic keyword detection, not AI - a transparent, inspectable pattern match
+// meant to save a first pass of typing, not to make the actual risk judgment.
+// Always reviewable and overridable directly in the checkboxes above.
+const RISK_PATTERNS = {
+  riskClient: /\bclient|customer|external stakeholder|prospect\b/i,
+  riskPII: /\bpii|personal(ly)? identifiable|ssn|social security|medical|health record|salary|passport|bank (account|detail)/i,
+  riskIrreversible: /\bsend|sent|delete|submit|schedule|publish|post|payment|transfer|approve\b/i,
+  riskNoReview: /\bautomatically|without (anyone|human|review)|no (human|manual) review|unattended|unsupervised\b/i,
+};
+
+function detectRisks() {
+  const text = document.getElementById('riskDesc').value;
+  if (!text.trim()) return;
+  const matched = [];
+  for (const [id, pattern] of Object.entries(RISK_PATTERNS)) {
+    const m = text.match(pattern);
+    if (m) {
+      document.getElementById(id).checked = true;
+      matched.push(`"${m[0]}" → ${document.querySelector('#' + id).closest('.risk-item').querySelector('span').textContent}`);
+    }
+  }
+  const note = document.getElementById('detectNote');
+  note.style.display = 'block';
+  note.innerHTML = matched.length
+    ? '<b>Keyword matches found (review and adjust manually):</b><br>' + matched.join('<br>')
+    : 'No risk keywords matched — doesn\'t mean risk-free, just that nothing obvious was mentioned. Check manually.';
+}
+
 function evaluate() {
   const actual = parseFloat(document.getElementById('actualPct').value) || 0;
   const target = parseFloat((document.getElementById('target').value.match(/\d+/) || [0])[0]);
