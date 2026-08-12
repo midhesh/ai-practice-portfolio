@@ -4,6 +4,8 @@
 
 **The real problem this represents:** teams adopt an AI prompt or workflow because it "seemed to work" on a handful of manual tries, then roll it out broadly. The cases where it quietly fails only surface later, after trust (or damage) is already baked in. There's rarely a repeatable, rubric-based way to check "is this actually good enough to trust" before scaling something. The decision to roll out ends up made on vibes, not evidence. This is the same problem as piloting any new operational process, you need a defined way to check it against a spread of realistic cases, not just the two examples that happened to work in a demo.
 
+![The two-pass pattern](../diagrams/two_pass_architecture.png)
+
 ## What it does
 
 A ~100-line harness that:

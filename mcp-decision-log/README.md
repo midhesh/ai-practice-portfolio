@@ -10,6 +10,8 @@ This has gotten worse since AI chat tools became part of daily work. A lot of re
 
 This is an MCP (Model Context Protocol) server, the current open standard for connecting an AI assistant to tools and data, exposing `log_decision` and `query_decisions` to any MCP-compatible client like Claude Desktop. The main thing worth noticing is that it checks itself. Every time someone logs a new decision, it's automatically compared against everything already on record before it gets saved, not just whenever someone remembers to go searching.
 
+![The two-pass pattern](../diagrams/two_pass_architecture.png)
+
 ## Two passes, not one
 
 The first pass is a fast keyword search. It's cheap and it's fine at proposing candidates worth a second look, but word overlap alone can't actually tell you much. Two decisions can use almost identical language and be about completely unrelated things, and two decisions can genuinely conflict while sharing almost no words at all. So every candidate the first pass surfaces gets a second look: an actual judgment about whether the two decisions are really connected, phrased as a plain answer along with one sentence of reasoning a person could act on immediately.

@@ -5,6 +5,8 @@ Most of the friction in adopting AI at work isn't really about the AI. It's abou
 
 Full code: github.com/midhesh/ai-decision-prompt-pilot-toolkit
 
+![Four tools, one toolkit](./diagrams/portfolio_pipeline.png)
+
 ## 1. Decision Log
 
 Say a decision gets made in a meeting or a quick back and forth on chat, and it never gets written down anywhere anyone would think to search. Weeks later someone else, working on something adjacent, makes the opposite call, with no way of knowing the first decision ever happened. Nobody notices until the two approaches run into each other.

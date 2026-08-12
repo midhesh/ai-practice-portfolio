@@ -4,6 +4,8 @@ Four small, working tools built around one idea: **a fast, cheap, deterministic 
 
 Full narrative writeup: [PORTFOLIO.md](./PORTFOLIO.md)
 
+![Four tools, one toolkit](./diagrams/portfolio_pipeline.png)
+
 ## The four tools
 
 | | Problem | Try it |
@@ -14,6 +16,8 @@ Full narrative writeup: [PORTFOLIO.md](./PORTFOLIO.md)
 | **[Meeting Bridge](./meeting-bridge)** | Decisions get made in meetings and never make it into anything searchable. Extracts candidate decisions from raw meeting notes and logs them through the real Decision Log tool above, proving the tools compose into an actual pipeline, not standalone demos. | `cd meeting-bridge && python extract.py` |
 
 ## Why these, together
+
+![The pattern behind every tool](./diagrams/two_pass_architecture.png)
 
 Each targets the same failure mode from a different angle: trusting a fast signal, word overlap, a keyword match, a passing metric, as if it were a real judgment. The fix is the same shape every time: keep the fast layer for what it's actually good at (speed, coverage), and put real reasoning where the decision actually happens.
 
