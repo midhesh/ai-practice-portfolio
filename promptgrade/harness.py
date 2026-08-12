@@ -80,7 +80,7 @@ def run(version: str):
     passed = sum(1 for r in results if r["passed"])
     total = len(results)
 
-    print(f"\nPromptGrade report — prompt version: {version}")
+    print(f"\nPromptGrade report, prompt version: {version}")
     print(f"Prompt: {resp['prompt_template'][:80]}...")
     print(f"Score: {passed}/{total} passed ({round(100 * passed / total)}%)\n")
 

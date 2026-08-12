@@ -113,7 +113,7 @@
   <div class="kicker">Decision support tool</div>
   <h1>AI Pilot Scorecard</h1>
   <p class="sub">
-    MIT's 2025 "State of AI in Business" study found roughly 95% of generative AI pilots fail to reach production or deliver measurable ROI — not because the technology fails, but because success criteria are rarely defined before the trial starts, so results get judged by feeling afterward.
+    MIT's 2025 "State of AI in Business" study found roughly 95% of generative AI pilots fail to reach production or deliver measurable ROI, not because the technology fails, but because success criteria are rarely defined before the trial starts, so results get judged by feeling afterward.
     (<a href="https://www.forbes.com/sites/andreahill/2025/08/21/why-95-of-ai-pilots-fail-and-what-business-leaders-should-do-instead/" target="_blank">source</a>)
     This tool forces that definition upfront, adds a responsible-use check, then gives an evidence-based verdict instead of a vibe-based one.
   </p>
@@ -139,7 +139,7 @@
 
   <div class="card">
     <span class="num">02</span>
-    <h2>Success criteria — set before running the pilot</h2>
+    <h2>Success criteria, set before running the pilot</h2>
     <div class="hint">A number and a threshold, not a feeling. If this can't be filled in before the pilot starts, that's the actual problem to fix first.</div>
     <div class="row">
       <div>
@@ -166,7 +166,7 @@
   <div class="card">
     <span class="num">03</span>
     <h2>Responsible-use risk check</h2>
-    <div class="hint">Checked items don't block the pilot — they raise the bar for what counts as "ready to scale," regardless of how good the metric looks.</div>
+    <div class="hint">Checked items don't block the pilot, they raise the bar for what counts as "ready to scale," regardless of how good the metric looks.</div>
     <label>Optional: paste a rough pilot description to pre-fill the checklist below</label>
     <textarea id="riskDesc" placeholder="e.g. AI drafts replies to client emails and sends them automatically without anyone reviewing first"></textarea>
     <button type="button" style="margin-bottom:14px;" onclick="detectRisks()">Detect risks from description</button>
@@ -179,7 +179,7 @@
 
   <div class="card">
     <span class="num">04</span>
-    <h2>After the trial — enter real results</h2>
+    <h2>After the trial, enter real results</h2>
     <div class="row3">
       <div>
         <label>Actual result (%)</label>
@@ -223,7 +223,7 @@
     </div>
   </div>
 
-  <footer>logic is fully client-side and inspectable — no black-box scoring</footer>
+  <footer>logic is fully client-side and inspectable, no black-box scoring</footer>
 </div>
 
 <script>
@@ -252,7 +252,7 @@ function detectRisks() {
   note.style.display = 'block';
   note.innerHTML = matched.length
     ? '<b>Keyword matches found (review and adjust manually):</b><br>' + matched.join('<br>')
-    : 'No risk keywords matched — doesn\'t mean risk-free, just that nothing obvious was mentioned. Check manually.';
+    : 'No risk keywords matched, doesn\'t mean risk-free, just that nothing obvious was mentioned. Check manually.';
 }
 
 function evaluate() {
@@ -280,12 +280,12 @@ function evaluate() {
     verdictClass = 'kill'; verdictWord = 'KILL';
     verdictSub = 'Did not meet the pre-committed threshold';
     reasoning = `Actual result (${actual}%) on ${metricName} fell short of the ${target}% target set before the trial. Per the pre-commitment made in step 2, this doesn't get graded on a curve after the fact.`;
-    nextStep = `Go back to step 1 — either the workflow needs a fundamentally different approach, or the target itself was unrealistic and should be re-set with fresh evidence before trying again.`;
+    nextStep = `Go back to step 1, either the workflow needs a fundamentally different approach, or the target itself was unrealistic and should be re-set with fresh evidence before trying again.`;
   } else if (highRiskGate) {
     verdictClass = 'iterate'; verdictWord = 'ITERATE';
     verdictSub = 'Metric passed, but risk profile caps the verdict';
-    reasoning = `The metric hit its target (${actual}% vs ${target}%), but this pilot touches ${riskCount} flagged risk area(s), including ${risks.irreversible && risks.noReview ? 'an irreversible action with no human review' : 'multiple sensitive factors'} — that combination is capped at Iterate regardless of metric performance until a human-review step is added.`;
-    nextStep = `Add an explicit human-approval step before the AI's output takes effect, then re-run the trial — the metric result should hold, this is purely about adding a safety gate, not fixing accuracy.`;
+    reasoning = `The metric hit its target (${actual}% vs ${target}%), but this pilot touches ${riskCount} flagged risk area(s), including ${risks.irreversible && risks.noReview ? 'an irreversible action with no human review' : 'multiple sensitive factors'}, that combination is capped at Iterate regardless of metric performance until a human-review step is added.`;
+    nextStep = `Add an explicit human-approval step before the AI's output takes effect, then re-run the trial, the metric result should hold, this is purely about adding a safety gate, not fixing accuracy.`;
   } else if (metThreshold === true && humanFactor >= 5) {
     verdictClass = 'scale'; verdictWord = 'SCALE';
     verdictSub = 'Bar met, human factor checks out, risk profile clean';
@@ -295,12 +295,12 @@ function evaluate() {
     verdictClass = 'iterate'; verdictWord = 'ITERATE';
     verdictSub = 'Hit the number, human factor is lagging';
     reasoning = `The metric passed (${actual}% vs ${target}% target), but trust/time-saved signals are weak (${humanFactor}/6). A metric passing without the human actually trusting or benefiting from it usually means the metric was measuring the wrong thing, or the surrounding workflow needs work before this leaves the pilot stage.`;
-    nextStep = `Interview the pilot user specifically about the low-scoring factor (trust or time) — the fix is almost never "make the AI better," it's usually a workflow or interface friction point.`;
+    nextStep = `Interview the pilot user specifically about the low-scoring factor (trust or time), the fix is almost never "make the AI better," it's usually a workflow or interface friction point.`;
   } else {
     verdictClass = 'iterate'; verdictWord = 'INCONCLUSIVE';
     verdictSub = "Success threshold wasn't defined precisely enough";
     reasoning = `No clear numeric target was set in step 2, so there's nothing to measure the actual result against.`;
-    nextStep = `Re-run step 2 with a specific number before continuing — discovering the pilot started before it was scoped is itself a useful, if uncomfortable, finding.`;
+    nextStep = `Re-run step 2 with a specific number before continuing, discovering the pilot started before it was scoped is itself a useful, if uncomfortable, finding.`;
   }
 
   document.getElementById('result').style.display = 'block';
@@ -308,14 +308,14 @@ function evaluate() {
   wordEl.className = 'verdict-word ' + verdictClass;
   wordEl.textContent = verdictWord;
   document.getElementById('verdictSub').textContent = verdictSub;
-  document.getElementById('mThreshold').textContent = `${actual}% actual vs ${target || '—'}% target`;
+  document.getElementById('mThreshold').textContent = `${actual}% actual vs ${target || ','}% target`;
   document.getElementById('mTrust').textContent = `${trust}/3`;
   document.getElementById('mTime').textContent = `${timeSaved}/3`;
   document.getElementById('mRisk').textContent = `${riskCount}/4`;
   document.getElementById('reasoning').textContent = reasoning;
   document.getElementById('nextStep').textContent = nextStep;
   document.getElementById('riskFlagBox').innerHTML = highRiskGate
-    ? `<div class="risk-flag">Risk gate active — see reasoning above. This overrides a metric-only pass.</div>` : '';
+    ? `<div class="risk-flag">Risk gate active, see reasoning above. This overrides a metric-only pass.</div>` : '';
 
   document.getElementById('result').scrollIntoView({behavior: 'smooth'});
 }

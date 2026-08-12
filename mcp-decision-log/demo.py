@@ -85,38 +85,37 @@ d3 = dict(
 print("\n--- Months later: the team decides to add a reranking step, explicitly superseding decision #1 ---")
 print(log_decision(**d3))
 
-# --- Decision #4: IEEE workshop budget ---
+# --- Decision #4: sales travel budget ---
 d4 = dict(
-    title="Approve the IEEE Student Branch workshop budget increase for external speaker fees",
+    title="Approve an increase to the sales team's annual conference travel budget",
     rationale=(
-        "This year's workshop series is bringing in industry experts who require paid "
-        "speaker fees, so the annual workshop budget needs to increase to cover it."
+        "Sales is attending two additional industry conferences this year to support new "
+        "market entry, so the annual travel budget needs to increase to cover the extra trips."
     ),
-    alternatives_rejected="Running the workshops without paid external speakers - rejected, lowers attendance and value.",
-    tags=["ieee"],
+    alternatives_rejected="Keeping the travel budget flat and cutting other conferences instead - rejected, would mean skipping the new markets entirely.",
+    tags=["sales"],
 )
 print("\n--- Decision #4: an unrelated prior decision that happens to share budget vocabulary ---")
 print(log_decision(**d4))
 
-# --- Decision #5: Music Club budget - a genuine lexical false positive against #4 ---
+# --- Decision #5: marketing sponsorship budget - a genuine lexical false positive against #4 ---
 d5 = dict(
-    title="Increase the Music Club's annual equipment budget by 25 percent",
+    title="Increase the marketing team's annual event sponsorship budget",
     rationale=(
-        "The club's instrument inventory is aging and several pieces need replacement "
-        "before the next festival season, so the annual budget allocation should increase "
-        "to cover new purchases."
+        "Marketing wants to sponsor two additional industry events this year to raise brand "
+        "visibility, so the annual sponsorship budget needs to increase to cover it."
     ),
-    alternatives_rejected="Keeping the budget flat and fundraising separately - rejected, too slow for the upcoming festival calendar.",
-    tags=["music-club"],
+    alternatives_rejected="Keeping the sponsorship budget flat and reducing paid ads instead - rejected, weaker return on visibility.",
+    tags=["marketing"],
 )
 register_recorded_judgment(
     candidate_text(d5["title"], d5["rationale"], d5["alternatives_rejected"]),
     candidate_text(d4["title"], d4["rationale"], d4["alternatives_rejected"]),
     verdict="FALSE_POSITIVE",
     reason=(
-        "Both mention an annual budget increase and use similar approval language, but one "
-        "funds music club equipment and the other funds IEEE workshop speaker fees - "
-        "unrelated initiatives with no actual dependency or conflict between them."
+        "Both mention an annual budget increase tied to attending or sponsoring more industry "
+        "events, but one is sales travel spend and the other is marketing sponsorship spend - "
+        "different budget lines with no actual dependency or conflict between them."
     ),
 )
 print("\n--- Decision #5: an unrelated budget decision that happens to share vocabulary with #4 ---")

@@ -116,7 +116,7 @@ def _cosine(a: dict[str, float], b: dict[str, float]) -> float:
 
 
 def _rank_by_similarity(query: str, entries: list[dict]) -> list[tuple[dict, float]]:
-    """TF-IDF + cosine similarity vector search — the same core mechanism behind
+    """TF-IDF + cosine similarity vector search, the same core mechanism behind
     production embedding-based retrieval (RAG), just with a hand-rolled sparse
     term-frequency vector space instead of a trained neural embedding model.
     Good enough to rank relevance meaningfully at small scale, with zero
@@ -195,7 +195,7 @@ def log_decision(
             elif verdict["verdict"] in ("CONTRADICTION", "RELATED_NOT_CONFLICTING"):
                 label = "LIKELY SUPERSEDES" if verdict["verdict"] == "CONTRADICTION" else "RELATED, NOT CONFLICTING"
                 overlap_warning = (
-                    f"\n\n[!] {label} — active decision #{best_entry['id']} ('{best_entry['title']}'). "
+                    f"\n\n[!] {label}, active decision #{best_entry['id']} ('{best_entry['title']}'). "
                     f"{verdict['reason']} "
                     + (f"Consider re-logging with supersedes_id={best_entry['id']}."
                        if verdict["verdict"] == "CONTRADICTION" else "")
@@ -258,7 +258,7 @@ def query_decisions(query: str, top_k: int = 3) -> str:
         elif e.get("supersedes"):
             status_line = f"\n  (this superseded #{e['supersedes']})"
         lines.append(
-            f"#{e['id']} — {e['title']}  (relevance: {score:.2f}){status_line}\n"
+            f"#{e['id']}, {e['title']}  (relevance: {score:.2f}){status_line}\n"
             f"  Rationale: {e['rationale']}\n"
             f"  Rejected alternatives: {e['alternatives_rejected'] or 'n/a'}\n"
             f"  Tags: {', '.join(e['tags']) or 'none'}\n"

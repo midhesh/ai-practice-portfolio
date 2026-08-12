@@ -1,46 +1,48 @@
-# Decision Log — proactive contradiction detection, with real judgment on top of search
+# Decision Log
 
 ## The problem
 
-Organizational decisions go stale silently. Something gets decided, gets half-remembered or half-superseded months later, and nobody notices the contradiction until it causes real friction. This has gotten worse as AI chat tools became part of daily work: a growing share of real reasoning now happens inside disposable, one-off AI conversations that leave no institutional trace once the tab closes. The outcome persists; the *why* doesn't — and there's no way for anyone, or any AI assistant, to check a new plan against what was already decided.
+A decision gets made somewhere, in a meeting, in a quick AI chat, in a Slack thread, and then it's never written down anywhere anyone would think to search. Weeks later someone else, working on something adjacent, makes the opposite call with no way of knowing the first decision existed. Nobody finds out until the two approaches collide.
+
+This has gotten worse since AI chat tools became part of daily work. A lot of real reasoning now happens inside a quick back and forth with an assistant that gets closed the moment the answer is good enough, and none of that ever ends up anywhere searchable. The outcome sticks around. The reasoning behind it doesn't.
 
 ## What it does
 
-An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server exposing `log_decision` and `query_decisions` to any MCP-compatible client (Claude Desktop, etc.). The core behavior is proactive, not reactive: **every new decision is automatically checked against everything already on record before it's saved**, not just when someone remembers to search.
+This is an MCP (Model Context Protocol) server, the current open standard for connecting an AI assistant to tools and data, exposing `log_decision` and `query_decisions` to any MCP-compatible client like Claude Desktop. The main thing worth noticing is that it checks itself. Every time someone logs a new decision, it's automatically compared against everything already on record before it gets saved, not just whenever someone remembers to go searching.
 
-## Two-stage architecture — and why stage 1 alone isn't the point
+## Two passes, not one
 
-**Stage 1 (cheap prefilter):** TF-IDF + cosine similarity — real vector-space search, hand-built with zero external dependencies. Fast, and good at exactly one thing: proposing candidates worth a second look out of what could be thousands of logged decisions.
+The first pass is a fast keyword search. It's cheap and it's fine at proposing candidates worth a second look, but word overlap alone can't actually tell you much. Two decisions can use almost identical language and be about completely unrelated things, and two decisions can genuinely conflict while sharing almost no words at all. So every candidate the first pass surfaces gets a second look: an actual judgment about whether the two decisions are really connected, phrased as a plain answer along with one sentence of reasoning a person could act on immediately.
 
-**Stage 2 (the actual intelligence):** word overlap alone can't tell the difference between "these two decisions are about the same thing" and "these two decisions coincidentally share vocabulary but are unrelated" — and it misses genuine contradictions phrased in completely different words. So every candidate stage 1 surfaces gets a second pass: an LLM is shown both decisions side by side and asked to judge the actual relationship — `CONTRADICTION`, `RELATED_NOT_CONFLICTING`, or `FALSE_POSITIVE` — with a one-sentence reason a human can act on immediately. This mirrors the standard production pattern for high-quality retrieval (a fast filter narrows the field, a slower reasoning pass makes the real call) — the lexical search was never meant to be the intelligent part.
+## What this looked like in a real run
 
-## Real output proving the judgment layer earns its place
+A genuine duplicate, caught and explained without anyone asking for it:
 
-**A true duplicate, correctly caught with reasoning, not just a similarity score:**
 ```
-[!] LIKELY SUPERSEDES — active decision #1 ('Use RAG over full fine-tuning...').
+[!] LIKELY SUPERSEDES , active decision #1 ('Use RAG over full fine-tuning...').
 Both decisions answer the exact same question (RAG vs. fine-tuning for the same
-knowledge assistant) with the same conclusion, phrased differently - this is a
+knowledge assistant) with the same conclusion, phrased differently. This is a
 duplicate decision made independently, not two different topics.
 Consider re-logging with supersedes_id=1.
 ```
 
-**A genuine lexical false positive — two unrelated decisions (music club equipment budget vs. IEEE workshop speaker fees) that share 51% word overlap purely by coincidence (both mention "annual budget increase"). A word-overlap-only system would flag this as a contradiction. The judgment layer correctly clears it:**
+Two completely unrelated decisions that happened to share language: one approving more sales travel budget, the other approving more marketing sponsorship budget. Both talk about increasing an annual budget to cover more industry events, and the two ended up sharing close to seventy percent of their wording. A search that stopped at word overlap would have flagged this as a conflict. The second pass got it right:
+
 ```
-(Lexical prefilter found 51% word overlap with #4, but the judgment layer cleared it:
-Both mention an annual budget increase and use similar approval language, but one funds
-music club equipment and the other funds IEEE workshop speaker fees - unrelated
-initiatives with no actual dependency or conflict between them. No action needed.)
+(Lexical prefilter found 69% word overlap with #4, but the judgment layer cleared it:
+Both mention an annual budget increase tied to attending or sponsoring more industry
+events, but one is sales travel spend and the other is marketing sponsorship spend,
+different budget lines with no actual dependency or conflict between them.)
 ```
 
-That false-positive case is the actual point of this project: a search-only system (any vector DB, any TF-IDF, any embedding model) would have flagged it and left a human to manually dismiss it. Adding real judgment on top is what makes the tool trustworthy enough to act on automatically.
+That second case is really the point of this whole thing. Any search tool, whether it's a vector database or plain keyword matching, would have flagged that overlap and left a person to sort it out manually. Putting real judgment on top of the search is what makes it trustworthy enough to act on without a human checking every single flag.
 
 ## Run it yourself
 
 ```bash
 python -m pip install mcp
-python demo.py          # runs the real scenario above end-to-end, including both judge cases
-python server.py        # runs as an actual MCP server over stdio, connectable from Claude Desktop or any MCP client
+python demo.py          # runs the scenario above end to end
+python server.py        # runs as an actual MCP server over stdio
 ```
 
-`judge.py` ships with real, live-generated judgments for the exact scenarios in `demo.py` (see `RECORDED_JUDGMENTS`), so the demo runs with zero API keys. Swapping in a live model call for arbitrary new decisions is a one-function change (`call_llm_judge_live`).
+`judge.py` ships with real judgments generated for the exact scenarios in `demo.py`, so the demo runs without needing an API key. Wiring in a live model call for arbitrary new decisions is a one-function change (`call_llm_judge_live`).

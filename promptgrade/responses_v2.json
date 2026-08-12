@@ -2,10 +2,10 @@
   "prompt_version": "v2",
   "prompt_template": "Classify the following email as Urgent, Medium, or Low priority. Before deciding, explicitly check: does this message suggest a recurring or repeated issue (not just a one-off)? If so, say so in your reason, since recurring issues often need escalation even when no single instance looks severe. Respond with the priority level and a one-sentence reason.\n\nEmail:\n{input}",
   "responses": {
-    "urgent-leak-report": "Urgent priority — an active water leak near a shared space is a safety and property risk that needs immediate escalation to building management. No recurrence signal, this is a fresh issue.",
-    "routine-supply-request": "Low priority — this is a routine restocking request and the sender explicitly noted there's no rush. No recurrence pattern.",
-    "ambiguous-hvac-complaint": "Medium priority — this is a recurring issue, the third occurrence this month, which suggests a pattern worth escalating to facilities for a permanent fix rather than logging another one-off comfort complaint.",
-    "client-facing-deadline-risk": "Urgent priority — the delayed furniture puts the Thursday client walkthrough at risk, which needs immediate attention from the team. No recurrence signal noted.",
-    "internal-admin-question": "Low priority — this is a routine informational question about an internal process with no urgency and no recurrence pattern."
+    "urgent-leak-report": "Urgent priority, an active water leak near a shared space is a safety and property risk that needs immediate escalation to building management. No recurrence signal, this is a fresh issue.",
+    "routine-supply-request": "Low priority, this is a routine restocking request and the sender explicitly noted there's no rush. No recurrence pattern.",
+    "ambiguous-hvac-complaint": "Medium priority, this is a recurring issue, the third occurrence this month, which suggests a pattern worth escalating to facilities for a permanent fix rather than logging another one-off comfort complaint.",
+    "client-facing-deadline-risk": "Urgent priority, the delayed furniture puts the Thursday client walkthrough at risk, which needs immediate attention from the team. No recurrence signal noted.",
+    "internal-admin-question": "Low priority, this is a routine informational question about an internal process with no urgency and no recurrence pattern."
   }
 }

@@ -1,5 +1,5 @@
 """
-Live auto-patch demo — the agentic loop.
+Live auto-patch demo, the agentic loop.
 ------------------------------------------
 This is run against a test case that was NOT part of the original v1/v2
 development set: false-urgency-signal, added specifically to prove the
@@ -37,7 +37,7 @@ case = cases["false-urgency-signal"]
 # overriding substance, so it plausibly still gets fooled by the literal
 # word "URGENT" in the subject line.
 v2_response = (
-    "Urgent priority — the subject line explicitly flags this as urgent "
+    "Urgent priority, the subject line explicitly flags this as urgent "
     "regarding a repeated parking issue. No indication of a recurring "
     "pattern beyond this single instance."
 )
@@ -58,7 +58,7 @@ if not result_v2["passed"]:
     # Genuine response the patched (v3) prompt produces on the same input -
     # now explicitly instructed not to let surface language override substance.
     v3_response = (
-        "Low priority — although the subject line uses the word 'urgent' and "
+        "Low priority, although the subject line uses the word 'urgent' and "
         "exclamation marks, the actual content describes a minor cosmetic "
         "parking-spot color issue that the sender explicitly calls 'no big deal' "
         "and 'kind of funny.' There's no real operational or safety impact here."

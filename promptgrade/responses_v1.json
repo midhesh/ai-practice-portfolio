@@ -2,10 +2,10 @@
   "prompt_version": "v1",
   "prompt_template": "Classify the following email as Urgent, Medium, or Low priority. Respond with the priority level and a one-sentence reason.\n\nEmail:\n{input}",
   "responses": {
-    "urgent-leak-report": "Urgent priority — an active water leak near a shared space is a safety and property risk that needs immediate escalation to building management.",
-    "routine-supply-request": "Low priority — this is a routine restocking request and the sender explicitly noted there's no rush.",
-    "ambiguous-hvac-complaint": "Medium priority — the room is uncomfortably warm during meetings, which affects comfort but poses no safety risk.",
-    "client-facing-deadline-risk": "Urgent priority — the delayed furniture puts the Thursday client walkthrough at risk, which needs immediate attention from the team.",
-    "internal-admin-question": "Low priority — this is a routine informational question about an internal process with no urgency."
+    "urgent-leak-report": "Urgent priority, an active water leak near a shared space is a safety and property risk that needs immediate escalation to building management.",
+    "routine-supply-request": "Low priority, this is a routine restocking request and the sender explicitly noted there's no rush.",
+    "ambiguous-hvac-complaint": "Medium priority, the room is uncomfortably warm during meetings, which affects comfort but poses no safety risk.",
+    "client-facing-deadline-risk": "Urgent priority, the delayed furniture puts the Thursday client walkthrough at risk, which needs immediate attention from the team.",
+    "internal-admin-question": "Low priority, this is a routine informational question about an internal process with no urgency."
   }
 }
