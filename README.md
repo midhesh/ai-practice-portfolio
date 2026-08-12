@@ -1,17 +1,17 @@
 # AI Decision / Prompt / Pilot Toolkit
 
-Three small, working tools built around one idea: **a fast, cheap, deterministic check can propose or flag, it can't judge.** Telling a real match from a coincidental one, or a correct answer from a differently-worded one, takes actual reasoning. Each tool pairs a cheap first-pass filter with a genuine reasoning layer on top, and each one is proven live in its own README with a real example of where the cheap layer alone gets it wrong.
+Four small, working tools built around one idea: **a fast, cheap, deterministic check can propose or flag, it can't judge.** Telling a real match from a coincidental one, or a correct answer from a differently-worded one, takes actual reasoning. Each tool pairs a cheap first-pass filter with a genuine reasoning layer on top, and each one is proven live in its own README with a real example of where the cheap layer alone gets it wrong.
 
 Full narrative writeup: [PORTFOLIO.md](./PORTFOLIO.md)
 
-## The three tools
+## The four tools
 
 | | Problem | Try it |
 |---|---|---|
 | **[Decision Log](./mcp-decision-log)** | Decisions get made and forgotten, the outcome sticks around, the reasoning doesn't. An MCP server that proactively catches duplicate or contradicting decisions before they cause friction, and clears false alarms automatically. | `cd mcp-decision-log && python demo.py` |
 | **[PromptGrade](./promptgrade)** | Teams trust an AI-assisted process because it "seemed fine" a few times, then find out it fails in ways nobody caught. A self-patching eval harness that grades responses, diagnoses failures, and fixes its own prompt automatically. | `cd promptgrade && python harness.py v1` |
 | **[AI Pilot Scorecard](./pilot-scorecard)** | AI pilots stall out because nobody defined success upfront. An interactive tool that locks in a success threshold before a trial runs, then won't recommend scaling a pilot, even a metrically successful one, if it carries unreviewed risk. | Open `pilot-scorecard/index.html` in any browser |
-| **[Meeting Bridge](./meeting-bridge)** | Decisions get made in meetings and never make it into anything searchable. Extracts candidate decisions from raw meeting notes and logs them through the real Decision Log tool above, proving the tools compose into an actual pipeline, not three disconnected demos. | `cd meeting-bridge && python extract.py` |
+| **[Meeting Bridge](./meeting-bridge)** | Decisions get made in meetings and never make it into anything searchable. Extracts candidate decisions from raw meeting notes and logs them through the real Decision Log tool above, proving the tools compose into an actual pipeline, not standalone demos. | `cd meeting-bridge && python extract.py` |
 
 ## Why these, together
 
