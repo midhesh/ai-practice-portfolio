@@ -1,0 +1,15 @@
+Weekly sync - Workplace Tech Team - notes
+
+Attendance: usual crew, plus Priya joining from the Singapore office this week.
+
+Quick catch-up on last week's items, nothing new there. Coffee machine on 3rd floor is still broken, facilities has a ticket open.
+
+Priya raised that the Singapore team has been experimenting with search over their project archive. After going back and forth on it, we decided to go with a retrieval-based approach instead of training a custom model on our documents, since the archive changes constantly and retraining would be a pain to keep current. We'll pull directly from the live docs instead.
+
+Also discussed the intern onboarding checklist - can revisit next week, not urgent.
+
+Separately, delivery raised a recurring problem: subcontractor invoices keep arriving in three different formats and someone manually reconciles them every month. We agreed to standardize on a single invoice template going forward and will ask procurement to enforce it for all new subcontractor agreements, since ad-hoc reconciliation has been eating about a day a month.
+
+Reminder: submit expense reports by the 25th.
+
+One more thing - marketing mentioned they liked how the new office renders turned out, nothing actionable there, just nice to hear.

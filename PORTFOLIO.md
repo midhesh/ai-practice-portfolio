@@ -1,6 +1,6 @@
 # AI Practice Portfolio — Midhesh Mahadevan Shankar
 
-Three working tools, built around one idea: a fast, cheap, deterministic check can *propose* candidates or *flag* possibilities, but it can't *judge* — telling apart a real match from a coincidental one, or a correct answer from a differently-worded one, takes actual reasoning. Each tool pairs a cheap first-pass filter with a genuine reasoning layer on top, and each one proves live, with a real example, exactly where the cheap layer alone gets it wrong. Full code and real results: **github.com/midhesh/ai-decision-prompt-pilot-toolkit**
+Four working tools, built around one idea: a fast, cheap, deterministic check can *propose* candidates or *flag* possibilities, but it can't *judge* — telling apart a real match from a coincidental one, or a correct answer from a differently-worded one, takes actual reasoning. Each tool pairs a cheap first-pass filter with a genuine reasoning layer on top, and each one proves live, with a real example, exactly where the cheap layer alone gets it wrong. Full code and real results: **github.com/midhesh/ai-decision-prompt-pilot-toolkit**
 
 ---
 
@@ -34,6 +34,16 @@ Three working tools, built around one idea: a fast, cheap, deterministic check c
 
 ---
 
-## Why these three, together
+## 4. Meeting Bridge
+
+**Right now:** decisions get made in meetings, not in the Decision Log — and nobody stops mid-meeting to fill out a form. Whatever got decided lives in raw meeting notes, next to reminders and small talk, and never becomes anything searchable.
+
+**What it does:** scans raw meeting notes, heuristically flags paragraphs that sound like decisions, structures each one into a clean decision, and logs it through the *actual* Decision Log tool above — not a copy of its logic, the real functions.
+
+**Proven live:** from 8 paragraphs of realistic, noisy meeting notes, the filter correctly flagged exactly 2 as decisions and ignored the rest (coffee machine complaints, an expense deadline, a compliment about renders). One extracted decision was automatically recognized as very likely the same decision already made in an earlier, unrelated meeting — caught from raw notes, with zero manual tagging, proving the other three tools compose into a real pipeline rather than three disconnected demos.
+
+---
+
+## Why these, together
 
 Each targets the same underlying failure mode from a different angle: **trusting a fast signal as if it were a judgment** — treating word overlap as agreement, keyword matches as correctness, or a passing metric as safety. The fix, every time, is the same shape: keep the fast layer for what it's actually good at (speed, coverage), and put real reasoning where the decision actually happens. That's the discipline this role is describing — not making AI more powerful, making the process around it trustworthy enough to act on.
